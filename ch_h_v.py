@@ -1,19 +1,26 @@
 import argparse
 import re
-import datetime
+from datetime import datetime
 from datetime import timedelta
 
-def time_from_str(str):
-  return (datetime.datetime.strptime(re.search(r'\b\d?\d:\d\d\b', str).group(0), '%H:%M'))
+# todo: typehint correctly
+def time_from_str(line):
+  return (datetime.strptime(re.search(r'\b\d?\d:\d\d\b', line).group(0), '%H:%M'))
   
-def datetime_to_str(inp):
+def datetime_to_str(inp: datetime) -> str:
   return ("{:d}:{:02d}".format(inp.hour, inp.minute))
 
-def timedelta_to_str(inp):
+def timedelta_to_str(inp: timedelta) -> str:
   seconds = inp.total_seconds()
   hours = int(seconds // 3600)
   minutes = int((seconds % 3600) // 60)
   return ("{:d}:{:02d}".format(hours, minutes))
+
+def get_halt_time(line: str) -> timedelta:
+  parts = line.split(' - ')
+  time_pause = time_from_str(parts[0])
+  time_resume = time_from_str(parts[1])
+  return time_resume - time_pause
 
 parser = argparse.ArgumentParser(
                     prog = 'ch_h_v',
@@ -35,27 +42,27 @@ finish_regex = r"\d{1,2}:\d{2} (встали)"
 
 for line in content:
   if re.match(day_regex, line):
+    # day started
     day_line = line
     if (args.verbose):
       print()
       print(day_line)
+  # halt time count
   if re.match(start_regex, line):
     time_start = time_from_str(line)
-    halt_time = timedelta()
+    halt_per_day = timedelta()
   if re.match(halt_regex, line):
-    parts = line.split(' - ')
-    time_pause = time_from_str(parts[0])
-    time_resume = time_from_str(parts[1])
-    halt_time += time_resume - time_pause
-    if (args.verbose): print(halt_time)
+    halt_per_day += get_halt_time(line)
+    if (args.verbose): print(halt_per_day)
   if re.match(finish_regex, line):
+    # day finished
     time_finish = time_from_str(line)
-    total_day_time = time_finish - time_start - halt_time
+    total_day_time = time_finish - time_start - halt_per_day
     if (args.verbose):
       print(day_line + ' ЧХВ = '
             + datetime_to_str(time_finish)
             + ' - ' + datetime_to_str(time_start)
-            + ' - ' + timedelta_to_str(halt_time)
+            + ' - ' + timedelta_to_str(halt_per_day)
             + ' = ' + timedelta_to_str(total_day_time))
     else:
       print(day_line + ' ЧХВ = ' + timedelta_to_str(total_day_time))
