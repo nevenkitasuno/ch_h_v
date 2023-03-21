@@ -7,7 +7,8 @@ import re
 #TO DO: don't work somewhy; typehint correctly
 def str_to_datetime(line):
   """
-  Returns a datetime object from a string of format "HH:MM bla bla bla"
+  Returns a datetime object from a string of format "HH:MM [bla bla bla]"
+
   >>> str_to_datetime("16:20 остановились на роднике")
   datetime.datetime(1900, 1, 1, 16, 20)
   >>> str_to_datetime("16:20")
@@ -17,7 +18,8 @@ def str_to_datetime(line):
   
 def datetime_to_str(inp: datetime) -> str:
   """
-  Returns a string of format HH:MM from a datetime object
+  Returns a string of format [H]H:MM from a datetime object
+
   >>> datetime_to_str(datetime(1900, 1, 1, 18, 1))
   '18:01'
   >>> datetime_to_str(datetime(1900, 1, 1, 8, 20))
@@ -28,6 +30,7 @@ def datetime_to_str(inp: datetime) -> str:
 def timedelta_to_str(inp: timedelta) -> str:
   """
   Returns a string of format HH:MM from a timedelta object
+
   >>> timedelta_to_str(timedelta(0, 0, 0, 0, 24, 5, 0))
   '5:24'
   >>> timedelta_to_str(timedelta(0, 0, 0, 0, 21, 18, 0))
