@@ -9,9 +9,15 @@ $(NAME):
 all: $(NAME)
 
 test: $(NAME)
-	pytest --doctest-modules
+	mypy $(SRCS)
+	pytest --doctest-modules $(SRCS)
+
+	ln -sr ch_h_v test/case_1/ch_h_v
+	cd test/case_1; ./test.sh
+	rm -f test/case_1/ch_h_v
 
 clean:
+	rm -f test/case_1/ch_h_v
 	rm -f $(NAME).zip
 
 fclean: clean
