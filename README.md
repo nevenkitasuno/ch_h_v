@@ -26,7 +26,7 @@ cat "Пример отчёта.txt" | ch_h_v -v
 
 ## Формат отчёта
 
-Пример отчёта лежит [в репозитории](https://github.com/nevenkitasuno/ch_h_v/edit/main/README.md).  
+Пример отчёта лежит [в репозитории](https://github.com/nevenkitasuno/ch_h_v/blob/main/Пример отчёта.txt).  
 
 Скрипт принимает во внимание только строчки следующего вида:  
 
