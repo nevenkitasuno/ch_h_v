@@ -1,10 +1,8 @@
-import re
-import enum
 from datetime import timedelta
 from typing import List
-from typing import Optional
 
 import converters as cvt
+from LineParse import e_LineType, get_line_type, RegexpLineParser
 
 def get_halt_time(line: str) -> timedelta:
   """
@@ -18,38 +16,6 @@ def get_halt_time(line: str) -> timedelta:
   time_pause = cvt.str_to_datetime(parts[0])
   time_resume = cvt.str_to_datetime(parts[1])
   return time_resume - time_pause
-
-@enum.unique
-class e_LineType(enum.Enum):
-  """
-  Describes line categories, as
-  line with a day number, or
-  line describing a halt, or
-  line declining start/finish of today's path
-  """
-  day_number = 1
-  halt = 2
-  start = 3
-  finish = 4
-
-def get_line_type(line: str) -> Optional[e_LineType]:
-  """
-  Returns category of a line
-
-  >>> get_line_type("18:33 - 18:42 остановились на ручье, пополнить запасы воды")
-  <e_LineType.halt: 2>
-  """
-  regexes = {
-  e_LineType.day_number: r"День \d{1,2}",
-  e_LineType.halt: r"\d{1,2}:\d{2} - \d{1,2}:\d{2} (привал|остановились|остановка)",
-  e_LineType.start: r"\d{1,2}:\d{2} (вышли)",
-  e_LineType.finish: r"\d{1,2}:\d{2} (встали)"}
-
-  for line_type in e_LineType:
-    if re.match(regexes[line_type], line):
-      return(line_type)
-  
-  return None
 
 def get_ch_h_v(inp: List[str], verbose: bool):
   """
@@ -72,20 +38,20 @@ def get_ch_h_v(inp: List[str], verbose: bool):
   """
 
   for line in inp:
-    if get_line_type(line) == e_LineType.day_number:
+    if get_line_type(line, RegexpLineParser()) == e_LineType.day_number:
       # day started
       day_line = line
       if (verbose):
         print()
         print(day_line)
     # halt time count
-    if get_line_type(line) == e_LineType.start:
+    if get_line_type(line, RegexpLineParser()) == e_LineType.start:
       time_start = cvt.str_to_datetime(line)
       halt_per_day = timedelta()
-    if get_line_type(line) == e_LineType.halt:
+    if get_line_type(line, RegexpLineParser()) == e_LineType.halt:
       halt_per_day += get_halt_time(line)
       if (verbose): print(halt_per_day)
-    if get_line_type(line) == e_LineType.finish:
+    if get_line_type(line, RegexpLineParser()) == e_LineType.finish:
       # day finished
       time_finish = cvt.str_to_datetime(line)
       total_day_time = time_finish - time_start - halt_per_day

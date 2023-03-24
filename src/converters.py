@@ -5,6 +5,8 @@ import re
 
 # def str_to_datetime(line: str) -> Optional[datetime]:
 #TO DO: don't work somewhy; typehint correctly
+# намеренно не стал использовать свой StringParse в этой функции,
+# т.к. тут мне интереснее как правильно применить typehint
 def str_to_datetime(line):
   """
   Returns a datetime object from a string of format "HH:MM [bla bla bla]"
