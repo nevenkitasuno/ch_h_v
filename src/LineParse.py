@@ -28,14 +28,16 @@ class e_LineType(enum.Enum):
 
 class ILineParse(Protocol):
   """Interface for parsing lines"""
-  def get_type(self, line: str) -> e_LineType:
+  @staticmethod
+  def get_type(line: str) -> e_LineType:
     """Returns category of a line"""
     raise NotImplementedError
   
 class RegexpLineParser:
   """Parse lines via regexp"""
 
-  def get_type(self, line: str) -> e_LineType:
+  @staticmethod
+  def get_type(line: str) -> e_LineType:
     """Returns category of a line"""
     regexes = {
     e_LineType.day_number: r"День \d{1,2}",
