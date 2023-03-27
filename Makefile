@@ -8,7 +8,7 @@ $(NAME):
 
 all: $(NAME)
 
-test: $(NAME)
+test:
 	mypy $(SRCS)
 	pytest --doctest-modules $(SRCS)
 
