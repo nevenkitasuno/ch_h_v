@@ -17,7 +17,7 @@ def get_halt_time(line: str) -> timedelta:
   time_resume = cvt.str_to_datetime(parts[1])
   return time_resume - time_pause
 
-def get_ch_h_v(inp: List[str], verbose: bool):
+def get_ch_h_v(inp: List[str], verbose: bool) -> None:
   """
   Counts and returns CH H V for appropriately formatted report.
 
