@@ -1,7 +1,7 @@
 import argparse
 import sys
 
-import ch_h_v
+from ch_h_v import get_ch_h_v
 
 def get_args() -> argparse.Namespace:
   parser = argparse.ArgumentParser(
@@ -26,7 +26,10 @@ def main() -> None:
     with open(args.filename) as f:
       content = f.read().splitlines()
   
-  ch_h_v.get_ch_h_v(content, args.verbose)
+  result_generator = get_ch_h_v(content, args.verbose)
+
+  for outp in result_generator:
+    print(outp)
 
 if __name__ == '__main__':
   main()
