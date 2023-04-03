@@ -16,7 +16,7 @@ def get_args() -> argparse.Namespace:
 
   return (args)
 
-def main():
+def main() -> None:
   
   args = get_args()
 
